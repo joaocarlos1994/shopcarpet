@@ -4,7 +4,7 @@
  * Copyright (c) 2016, hyperCLASS. All rights reserved. hyperCLASS
  * proprietary/confidential. Use is subject to license terms.
  */
-package br.com.shopcarpet.domain;
+package br.com.shopcarpet.domain.carpet;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ package br.com.shopcarpet.infrastructure.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.shopcarpet.domain.Carpet;
+import br.com.shopcarpet.domain.carpet.Carpet;
 
 /**
  * A <code>CarpetRepository</code> e uma interface criada

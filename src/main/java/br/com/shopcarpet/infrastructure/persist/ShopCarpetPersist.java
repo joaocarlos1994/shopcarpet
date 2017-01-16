@@ -12,8 +12,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.shopcarpet.domain.Carpet;
-import br.com.shopcarpet.domain.ShopCarpetRepository;
+import br.com.shopcarpet.domain.carpet.Carpet;
+import br.com.shopcarpet.domain.carpet.CarpetNotFoundException;
+import br.com.shopcarpet.domain.carpet.ShopCarpetRepository;
 
 /**
  * A <code>ShopCarpetPersist</code> e um classe que
@@ -53,6 +54,7 @@ public class ShopCarpetPersist implements ShopCarpetRepository {
 	@Override
 	public Carpet get(final long id) {
 		final Carpet carpet = repositoryJpa.findOne(Long.valueOf(id));
+		if (carpet == null) throw new CarpetNotFoundException();
 		return carpet;
 	}
 }

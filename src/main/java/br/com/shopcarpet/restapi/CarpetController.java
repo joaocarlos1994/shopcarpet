@@ -6,16 +6,25 @@
  */
 package br.com.shopcarpet.restapi;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.shopcarpet.domain.Carpet;
-import br.com.shopcarpet.domain.ShopCarpetRepository;
+import br.com.shopcarpet.domain.carpet.Carpet;
+import br.com.shopcarpet.domain.carpet.CarpetNotFoundException;
+import br.com.shopcarpet.domain.carpet.ShopCarpetRepository;
+import br.com.shopcarpet.domain.error.Error;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.restapi.wrapper.CarpetsWrapper;
 
@@ -44,35 +53,41 @@ public class CarpetController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String save(final @RequestBody CarpertWrapper carpertWrapper) {
+	public ResponseEntity<CarpertWrapper> save(final @RequestBody CarpertWrapper carpertWrapper) {
 		final Carpet carpet = carpertWrapper.getCarpet();
 		repository.save(carpet);
-		return "Sucess";
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String delete(final @RequestBody CarpertWrapper carpertWrapper) {
+	public ResponseEntity<CarpertWrapper> delete(final @RequestBody CarpertWrapper carpertWrapper) {
 		final Carpet carpet = carpertWrapper.getCarpet();
 		repository.delete(carpet);
-		return "Sucess";
+		return new ResponseEntity<CarpertWrapper>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String update(final @RequestBody CarpertWrapper carpertWrapper) {
+	public ResponseEntity<CarpertWrapper> update(final @RequestBody CarpertWrapper carpertWrapper) {
 		final Carpet carpet = carpertWrapper.getCarpet();
 		repository.update(carpet);
-		return "Sucess";
+		return new ResponseEntity<CarpertWrapper>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public CarpertWrapper carpetId(final @PathVariable("id") Integer id) {
+	public ResponseEntity<CarpertWrapper> carpetId(final @PathVariable("id") Integer id, final UriComponentsBuilder ucb)
+			throws CarpetNotFoundException {
 		final Carpet carpet = repository.get(id);
-		return new CarpertWrapper(carpet);
+		return new ResponseEntity<CarpertWrapper>(new CarpertWrapper(carpet), HttpStatus.OK);
+	}
+
+	@ExceptionHandler(CarpetNotFoundException.class)
+	public ResponseEntity<Error> carpetNotFound(final CarpetNotFoundException carpetNotFoundException) {
+		return new ResponseEntity<Error>(carpetNotFoundException.getError(), HttpStatus.NOT_FOUND);
 	}
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public CarpetsWrapper allCarpet() {
-		return new CarpetsWrapper(repository.listAll());
+	public ResponseEntity<CarpetsWrapper> allCarpet() {
+		return new ResponseEntity<CarpetsWrapper>(new CarpetsWrapper(repository.listAll()), HttpStatus.OK);
 	}
 
 }

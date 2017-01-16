@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import br.com.shopcarpet.domain.Carpet;
+import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.restapi.serializer.CarpetsSerialize;
 
 /**

@@ -17,8 +17,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import br.com.shopcarpet.domain.Carpet;
-import br.com.shopcarpet.domain.Color;
+import br.com.shopcarpet.domain.carpet.Carpet;
+import br.com.shopcarpet.domain.carpet.Color;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 
 /**

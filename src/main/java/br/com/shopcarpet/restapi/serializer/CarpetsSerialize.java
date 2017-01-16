@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import br.com.shopcarpet.domain.Carpet;
+import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.restapi.wrapper.CarpetsWrapper;
 
