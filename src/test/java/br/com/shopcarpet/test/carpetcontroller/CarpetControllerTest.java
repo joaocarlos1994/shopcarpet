@@ -33,6 +33,7 @@ import br.com.shopcarpet.domain.carpet.Color;
 import br.com.shopcarpet.infrastructure.persist.ShopCarpetPersist;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.test.db.DbEnvironment;
+import br.com.shopcarpet.test.util.DefaultComparatorCarpet;
 
 /**
  * A <code>CarpetControllerTest</code> representa uma classe de teste do
@@ -70,13 +71,13 @@ public class CarpetControllerTest {
 		final Carpet carpet = new Carpet.Builder("Tapete Teste", 10.0, 10.0, Color.BRANCO).preco(100.0).id(new Long(0)).build();
 		this.mockMvc.perform(post("/").content(convertObjectToJson(new CarpertWrapper(carpet))).contentType(MediaType.APPLICATION_JSON_VALUE));
 		final MvcResult result = this.mockMvc.perform(get("/4")).andReturn();
-		JSONAssert.assertEquals(convertObjectToJson(new CarpertWrapper(carpet)), result.getResponse().getContentAsString(), true);
+		JSONAssert.assertEquals(convertObjectToJson(new CarpertWrapper(carpet)), result.getResponse().getContentAsString(), new DefaultComparatorCarpet("id"));
 	}
 	
 	@Test
 	public void buscaPorId() throws Exception {
 		final MvcResult result = this.mockMvc.perform(get("/1")).andReturn();
-		final Carpet carpet = new Carpet.Builder("Tapete Sala de Estar", 2.5, 1.5, Color.VERDE).preco(65).build();
+		final Carpet carpet = new Carpet.Builder("Tapete Sala de Estar", 2.5, 1.5, Color.VERDE).preco(65).id(new Long(1)).build();
 		
 		JSONAssert.assertEquals(convertObjectToJson(new CarpertWrapper(carpet)), result.getResponse().getContentAsString(), true);
 	}
