@@ -33,6 +33,10 @@ public class CarpertWrapper {
 		this.carpet = carpet;
 	}
 	
+	public Long getId() {
+		return carpet.getId();
+	}
+	
 	public String getModelo() {
 		return carpet.getModelo();
 	}

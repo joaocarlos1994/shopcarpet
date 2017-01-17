@@ -17,6 +17,7 @@
 	<properties>
 		<spring.version>4.3.5.RELEASE</spring.version>
 		<hibernate.version>5.2.5.Final</hibernate.version>
+		<hsql.version>1.4.193</hsql.version>
 	</properties>
 
 	<!-- Dependencias -->
@@ -50,11 +51,17 @@
 			<artifactId>spring-web</artifactId>
 			<version>4.3.5.RELEASE</version>
 		</dependency>
+		<!-- Framework for test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.193</version>
 		</dependency>
 		<!-- Frameworkd para gerar Json -->
 		<dependency>
@@ -114,6 +121,12 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- Framework de test para Json -->
+		<dependency>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 	</dependencies>
 

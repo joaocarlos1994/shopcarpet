@@ -17,7 +17,9 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.Test;
 
 /**
- * A
+ * A <code>TestConnectDataBase</code> testa a conexao com banco
+ * de dados, passando os parametros para essenciais para obter
+ * a conexao.
  * 
  * @author João Batista
  * @version 1.0 10 de jan de 2017

@@ -31,6 +31,7 @@ public class CarpertSerializer extends JsonSerializer<CarpertWrapper> {
 			throws IOException, JsonProcessingException {
 		
 		jsonGenerator.writeStartObject();
+		jsonGenerator.writeNumberField("id", carpet.getId());
 		jsonGenerator.writeStringField("modelo", carpet.getModelo());
 		jsonGenerator.writeNumberField("comprimento", carpet.getComprimento());
 		jsonGenerator.writeNumberField("largura", carpet.getLargura());
