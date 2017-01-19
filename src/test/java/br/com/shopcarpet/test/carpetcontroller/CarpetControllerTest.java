@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.shopcarpet.config.WebConfig;
 import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.domain.carpet.Color;
-import br.com.shopcarpet.infrastructure.persist.ShopCarpetPersist;
+import br.com.shopcarpet.infrastructure.persist.carpet.ShopCarpetPersist;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.test.db.DbEnvironment;
 import br.com.shopcarpet.test.util.DefaultComparatorCarpet;

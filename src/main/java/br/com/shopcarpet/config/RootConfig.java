@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @ComponentScan(basePackages = {"br.com.shopcarpet.infrastructure.persist"})
 @EnableJpaRepositories(basePackages = { "br.com.shopcarpet.infrastructure.persist" })
-@Import(JpaConfig.class)
+@Import({JpaConfig.class, SecurityConfig.class})
 public class RootConfig {
 
 }

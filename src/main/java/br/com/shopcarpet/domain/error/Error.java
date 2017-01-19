@@ -7,7 +7,8 @@
 package br.com.shopcarpet.domain.error;
 
 /**
- * 
+ * A enum <code>Error</code> representa o possivel
+ * que poderam ocorrer dentro da aplicação.
  * 
  * @author João Batista
  * @version 1.0 13 de jan de 2017

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 
 /**
- * 
+ * A <code>CarpertSerializer</code> serializa um objeto carpet.
  * 
  * @author João Batista
  * @version 1.0 8 de jan de 2017

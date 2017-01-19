@@ -14,7 +14,10 @@ import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.restapi.serializer.CarpetsSerialize;
 
 /**
- * 
+ * A <code>CarpetsWrapper</code> tem a responsabilidade
+ * de compor um lista de objetos wrapper, assim delegando
+ * para a <code>CarpetsSerialize</code> a responsabilidade
+ * de serializar esta lista.
  * 
  * @author João Batista
  * @version 1.0 10 de jan de 2017

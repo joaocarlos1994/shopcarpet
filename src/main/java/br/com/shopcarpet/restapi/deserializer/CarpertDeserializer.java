@@ -22,7 +22,9 @@ import br.com.shopcarpet.domain.carpet.Color;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 
 /**
- * 
+ * A <code>CarpertDeserializer</code> tem a responsabilidade
+ * de deserializar um objeto json carpet e transformar e um
+ * objeto Carpet java.
  * 
  * @author João Batista
  * @version 1.0 10 de jan de 2017

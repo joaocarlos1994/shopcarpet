@@ -18,7 +18,8 @@ import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.restapi.wrapper.CarpetsWrapper;
 
 /**
- * 
+ * A <code>CarpetsSerialize</code> serializa um lista de objetos
+ * carpets.
  * 
  * @author João Batista
  * @version 1.0 10 de jan de 2017
