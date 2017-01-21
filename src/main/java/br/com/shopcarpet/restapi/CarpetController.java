@@ -7,6 +7,7 @@
 package br.com.shopcarpet.restapi;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.domain.carpet.CarpetNotFoundException;
-import br.com.shopcarpet.domain.carpet.ShopCarpetRepository;
 import br.com.shopcarpet.domain.error.Error;
 import br.com.shopcarpet.restapi.wrapper.CarpertWrapper;
 import br.com.shopcarpet.restapi.wrapper.CarpetsWrapper;
+import br.com.shopcarpet.util.RepositoryShopCarpet;
 
 /**
  * A <code>CarpetController</code> representa todos os servicos disponiveis
@@ -36,10 +37,10 @@ import br.com.shopcarpet.restapi.wrapper.CarpetsWrapper;
 @RestController
 public class CarpetController {
 
-	private final ShopCarpetRepository repository;
+	private final RepositoryShopCarpet<Carpet> repository;
 
 	@Autowired
-	public CarpetController(final ShopCarpetRepository repository) {
+	public CarpetController(@Qualifier("shopCarpetPersist") final RepositoryShopCarpet<Carpet> repository) {
 		super();
 		this.repository = repository;
 	}

@@ -6,53 +6,164 @@
  */
 package br.com.shopcarpet.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.Filter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.shopcarpet.authentication.AuthenticationListener;
+import br.com.shopcarpet.authentication.PreAuthenticatedUserFilter;
+import br.com.shopcarpet.authentication.jwt.JwtSignatureVerifier;
+import br.com.shopcarpet.authentication.jwt.JwtVerifier;
 
 /**
- * A <code>SecurityConfig</code> contem os bean de configuracao
- * do spring security, extendo o <code>WebSecurityConfigurerAdapter</code>
- * contribuindo assim para uma melhro configuracao do spring security,
+ * A <code>SecurityConfig</code> contem os bean de configuracao do spring
+ * security, extendo o <code>WebSecurityConfigurerAdapter</code> contribuindo
+ * assim para uma melhro configuracao do spring security,
  * 
  * @author João Batista
  * @version 1.0 18 de jan de 2017
  */
 @Configuration
-@EnableWebSecurity	// Ativa o web security
+@EnableWebSecurity // Ativa o web security
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
+	@Autowired
+	@Qualifier("jwtAuthenticationManager")
+	private AuthenticationManager jwtAuthenticationManager;
+
+	@Autowired
+	private AuthenticationSuccessHandler successHandler;
+
+	@Autowired
+	private AuthenticationFailureHandler failureHandler;
+
+	@Autowired
+	@Qualifier("providerManager")
+	private AuthenticationManager providerManager;
+
 	/**
 	 * Metodo usado para configurar Spring Filter Chain
-	 * */
-	@Override
-	public void configure(final WebSecurity web) throws Exception {
-		super.configure(web);
-	}
-	
+	 */
+	/*
+	 * @Override public void configure(final WebSecurity web) throws Exception {
+	 * super.configure(web); }
+	 */
+
 	/**
-	 * Metodo para configurar como as solicitacoes sao 
-	 * protegidas por interceptadores.
-	 * */
+	 * Metodo para configurar como as solicitacoes sao protegidas por
+	 * interceptadores.
+	 */
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		super.configure(http);
+		http.addFilter(preAuthenticationFilter());
+		http.addFilter(loginFilter());
+		http.addFilter(anonymousFilter());
+		http.csrf().disable();
+		http.authorizeRequests()
+		.antMatchers("/**").hasRole("ADMIN")
+		.antMatchers("/user/**").permitAll()
+		.anyRequest().authenticated()
+		.and().formLogin();
 	}
-	
+
 	/**
-	 * Metodo usado para confiruacao do user-details services, ou seja,
-	 * para configurar a authenticacao do user-details.
-	 * */
-	@Override
-	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("user").password("password").roles("USER").and()
-		.withUser("admin").password("password").roles("USER", "ADMIN");
+	 * Metodo usado para confiruacao do user-details services, ou seja, para
+	 * configurar a authenticacao do user-details.
+	 */
+	/*
+	 * @Override protected void configure(final AuthenticationManagerBuilder
+	 * auth) throws Exception { super.configure(auth); }
+	 */
+
+	@Bean
+	public AuthenticationManager providerManager(
+			@Qualifier("defaultAuthenticationProvider") final AuthenticationProvider provider) {
+		return new ProviderManager(Arrays.asList(provider));
 	}
-	
+
+	@Bean
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder(5);
+	}
+
+	@Bean
+	public Filter preAuthenticationFilter() {
+		final PreAuthenticatedUserFilter filter = new PreAuthenticatedUserFilter();
+		filter.setAuthenticationManager(jwtAuthenticationManager);
+		return filter;
+	}
+
+	@Bean
+	public Filter anonymousFilter() {
+		return new AnonymousAuthenticationFilter("anonymousUser");
+	}
+
+	@Bean
+	public Filter loginFilter() {
+		final UsernamePasswordAuthenticationFilter filter = new UsernamePasswordAuthenticationFilter();
+		filter.setAuthenticationManager(providerManager);
+		filter.setAuthenticationSuccessHandler(successHandler);
+		filter.setAuthenticationFailureHandler(failureHandler);
+		return filter;
+	}
+
+	@Bean
+	public List<AuthenticationListener> authenticationListeners(
+			@Qualifier("responseHeaderAuthenticationListener") final AuthenticationListener responseHeaderListener) {
+		final List<AuthenticationListener> list = new ArrayList<>(1);
+		list.add(responseHeaderListener);
+		return list;
+	}
+
+	@Bean
+	public List<JwtVerifier> verifiersList(@Qualifier("issuerReferenceClaimsVerifier") final JwtVerifier issuerVerifier,
+			@Qualifier("notBeforeTimeClaimsVerifier") final JwtVerifier notBeforeTimeVerifier,
+			@Qualifier("referenceDateClaimsVerifier") final JwtVerifier referenceDateVerifier,
+			@Qualifier("jwtSignatureVerifier") final JwtVerifier jwtSignatureVerifier) {
+		final List<JwtVerifier> verifiersList = new ArrayList<>(4);
+		verifiersList.add(jwtSignatureVerifier);
+		verifiersList.add(issuerVerifier);
+		verifiersList.add(notBeforeTimeVerifier);
+		verifiersList.add(referenceDateVerifier);
+		return verifiersList;
+	}
+
+	@Bean
+	public JwtVerifier jwtSignatureVerifier(@Value("${jwt.secret}") final String secret) {
+		return new JwtSignatureVerifier(secret);
+	}
+
+	@Bean
+	public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+		final MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+		methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
+		methodInvokingFactoryBean.setTargetMethod("setStrategyName");
+		methodInvokingFactoryBean.setArguments(new Object[] { SecurityContextHolder.MODE_INHERITABLETHREADLOCAL });
+		return methodInvokingFactoryBean;
+	}
+
 }

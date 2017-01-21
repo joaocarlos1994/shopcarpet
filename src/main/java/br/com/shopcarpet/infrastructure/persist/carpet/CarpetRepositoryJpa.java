@@ -19,6 +19,6 @@ import br.com.shopcarpet.domain.carpet.Carpet;
  * @author João Batista
  * @version 1.0 11 de jan de 2017
  */
-public interface CarpetRepository extends JpaRepository<Carpet, Long> {
+public interface CarpetRepositoryJpa extends JpaRepository<Carpet, Long> {
 
 }

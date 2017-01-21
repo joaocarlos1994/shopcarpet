@@ -1,30 +1,26 @@
 /*
- * shopcarpet 1.0 18 de jan de 2017
+ * shopcarpet 1.0 19 de jan de 2017
  *
  * Copyright (c) 2016, hyperCLASS. All rights reserved. hyperCLASS
  * proprietary/confidential. Use is subject to license terms.
  */
-package br.com.shopcarpet.domain.usercarpet;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+package br.com.shopcarpet.domain.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
  * 
  * 
  * @author João Batista
- * @version 1.0 18 de jan de 2017
+ * @version 1.0 19 de jan de 2017
  */
 @Entity
 public class UserCarpet {
+	
 	@Id
 	@Column(name="id", unique=true, nullable=false)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,19 +29,28 @@ public class UserCarpet {
 	private final String name;
 	@Column
 	private final String password;
-	@OneToMany
-	private final List<AuthorityCarpet> authority;
+	@Column
+	private final RoleCarpet role;
 	
-	public UserCarpet(final Long id, final String name, final String password) {
+	public UserCarpet(final Long id, final String name, final String password, final RoleCarpet role) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.password = password;
-		this.authority = new ArrayList<>();
+		this.role = role;
+	}
+	
+	@SuppressWarnings("unused")
+	private UserCarpet() {
+		super();
+		this.id = new Long(0);
+		this.name = null;
+		this.password = null;
+		this.role = null;
 	}
 
-	public Long getId() {
-		return id;
+	public RoleCarpet getRole() {
+		return role;
 	}
 
 	public String getName() {
@@ -55,11 +60,4 @@ public class UserCarpet {
 	public String getPassword() {
 		return password;
 	}
-
-	public List<AuthorityCarpet> getAuthority() {
-		return Collections.unmodifiableList(authority);
-	}
-	
-	
-	
 }

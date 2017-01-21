@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.shopcarpet.domain.carpet.Carpet;
 import br.com.shopcarpet.domain.carpet.CarpetNotFoundException;
-import br.com.shopcarpet.domain.carpet.ShopCarpetRepository;
+import br.com.shopcarpet.util.RepositoryShopCarpet;
 
 /**
  * A <code>ShopCarpetPersist</code> e um classe que
@@ -26,10 +26,10 @@ import br.com.shopcarpet.domain.carpet.ShopCarpetRepository;
  * @version 1.0 10 de jan de 2017
  */
 @Repository
-public class ShopCarpetPersist implements ShopCarpetRepository {
+public class ShopCarpetPersist implements RepositoryShopCarpet<Carpet> {
 
 	@Autowired
-	private CarpetRepository repositoryJpa;
+	private CarpetRepositoryJpa repositoryJpa;
 
 	@Override
 	public void delete(final Carpet entity) {
@@ -56,5 +56,10 @@ public class ShopCarpetPersist implements ShopCarpetRepository {
 		final Carpet carpet = repositoryJpa.findOne(Long.valueOf(id));
 		if (carpet == null) throw new CarpetNotFoundException();
 		return carpet;
+	}
+
+	@Override
+	public Carpet loadByUserName(final String name) {
+		return null;
 	}
 }
