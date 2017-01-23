@@ -30,7 +30,7 @@ public class PreAuthenticatedAuthentication extends PreAuthenticatedAuthenticati
     private static final long serialVersionUID = 1L;
 
     public PreAuthenticatedAuthentication(final UserCarpet user) {
-        super(user, Arrays.asList(new DefaultGrantedAuthority(user.getRole())));
+        super(user, user.getPassword(), Arrays.asList(new DefaultGrantedAuthority(user.getRole())));
         setAuthenticated(true);
     }
 
